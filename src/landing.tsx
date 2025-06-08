@@ -1,5 +1,3 @@
-// Note: You need to install the OpenAI SDK with: npm install openai
-
 import './styles.css'
 import MagicSlider from './components/MagicSlider'
 
@@ -65,8 +63,8 @@ class SliderGenerator {
     errorContainer.className = 'error-container hidden'
     this.errorContainer = errorContainer
 
-    // Result container
-    const resultContainer = document.createElement('div')
+    // Result container (JSON output)
+    const resultContainer = document.createElement('pre')
     resultContainer.className = 'result-container hidden'
     this.resultContainer = resultContainer
 
@@ -220,6 +218,10 @@ class SliderGenerator {
   }
 
   private renderSlides(config: PresentationConfig): void {
+    if (!config.slides || !Array.isArray(config.slides) || config.slides.length === 0) {
+      this.showError('Invalid slides data received')
+      return
+    }
     if (!this.sliderContainer) return
 
     // Clear previous content
@@ -237,10 +239,6 @@ class SliderGenerator {
     const event = new CustomEvent('slidesGenerated', { detail: config })
     magicSlider.dispatchEvent(event)
 
-    // Initialize the MagicSlider with the config
-    if (magicSlider instanceof MagicSlider) {
-      magicSlider.renderSlides(config)
-    }
   }
 
   private showLoading(): void {
@@ -253,11 +251,23 @@ class SliderGenerator {
     if (this.resultContainer) {
       this.resultContainer.classList.add('hidden')
     }
+    if (this.generateButton) {
+      this.generateButton.disabled = true
+    }
+    if (this.input) {
+      this.input.disabled = true
+    }
   }
 
   private hideLoading(): void {
     if (this.loadingIndicator) {
       this.loadingIndicator.classList.add('hidden')
+    }
+    if (this.generateButton) {
+      this.generateButton.disabled = false
+    }
+    if (this.input) {
+      this.input.disabled = false
     }
   }
 

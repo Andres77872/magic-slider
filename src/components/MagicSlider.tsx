@@ -57,6 +57,10 @@ class MagicSlider extends HTMLElement {
   }
 
   renderSlides(config: PresentationConfig): void {
+    if (!config.slides || !Array.isArray(config.slides) || config.slides.length === 0) {
+      console.error('MagicSlider.renderSlides: invalid slides data:', config.slides)
+      return
+    }
     // Initialize the reveal container
     this.innerHTML = `
       <div class="reveal">
@@ -70,9 +74,9 @@ class MagicSlider extends HTMLElement {
       .filter(Boolean)
 
     // If Reveal is already initialized, destroy it first
-    if (typeof Reveal.destroy === 'function') {
-      Reveal.destroy()
-    }
+    // if (typeof Reveal.destroy === 'function') {
+    //   Reveal.destroy()
+    // }
 
     Reveal.initialize({
       hash: true,
@@ -88,6 +92,10 @@ class MagicSlider extends HTMLElement {
       return
     }
 
+    if (!config.slides || !Array.isArray(config.slides)) {
+      console.error('Invalid slides data:', config.slides)
+      return
+    }
     config.slides.forEach((slide) => {
       const section = document.createElement('section')
 
