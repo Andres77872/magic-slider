@@ -10,10 +10,15 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "highlight.js": "^11.8.0",
     "reveal.js": "^4.6.0"
   },
   "devDependencies": {
+    "@vitejs/plugin-react": "^4.0.0",
+    "@types/react": "^18.2.6",
+    "@types/react-dom": "^18.2.4",
     "@eslint/js": "^9.25.0",
     "@types/reveal.js": "^5.0.5",
     "globals": "^16.0.0",

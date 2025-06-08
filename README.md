@@ -1,73 +1,54 @@
 # Magic Slider
 
-A JSON-driven template project to generate [Reveal.js](https://revealjs.com/) presentations dynamically from JSON templates.
+A React + Vite application that generates interactive [Reveal.js](https://revealjs.com/) presentations using the OpenAI Chat API.
 
 ## Getting Started
 
-Install dependencies:
-```bash
-npm install
-# or yarn
-```
+1. Copy `.env.example` to `.env` and add your OpenAI API key:
 
-Start the development server:
-```bash
-npm run dev
-```
+   ```bash
+   cp .env.example .env
+   ```
 
-Open http://localhost:5173 in your browser. The default template _basic_ will be loaded.
+2. Install dependencies:
+
+   ```bash
+   npm install
+   ```
+
+3. Start the development server:
+
+   ```bash
+   npm run dev
+   ```
+
+4. Open http://localhost:5173 in your browser.
 
 ## Usage
 
-Templates are JSON files located in `public/templates`. You can select a template by adding a `template` query parameter to the URL.
+- Enter a prompt describing the presentation you want (e.g., "Create a 5-slide presentation about AI").
+- Click **Generate Slides**.
+- Watch the JSON configuration stream in the box and, once complete, the slides will render below.
 
-- **basic**: Basic slides example
-- **code-highlight**: Slide with syntax-highlighted code sample
-- **image-background**: Slide with a background image
-- **with-notes**: Slide with speaker notes
+## Example JSON
 
-For example:
-```text
-http://localhost:5173/?template=code-highlight
-```
-
-### Template Format
-
-Each template must define an array of slides and can optionally include Reveal.js options and plugins:
+You can test with a static JSON config by pasting it into the prompt (or editing the code). For example:
 
 ```json
 {
-  "revealOptions": {
-    "hash": true,
-    "slideNumber": true
-  },
   "plugins": ["highlight", "notes"],
   "slides": [
     {
-      "title": "Slide Title",
-      "content": "<p>HTML content for the slide.</p>",
-      "backgroundImage": "path/to/image.jpg",
-      "attributes": {
-        "data-state": "intro",
-        "data-note": "Speaker notes here"
-      }
+      "title": "Introduction",
+      "content": "<p>Welcome to the presentation.</p>"
     }
   ]
 }
 ```
 
-## Creating Your Own Template
-
-1. Add a JSON file in `public/templates` (e.g., `custom.json`).
-2. Define your `slides`, optional `plugins`, and `revealOptions` as shown above.
-3. Open the presentation with your template:
-   ```text
-   http://localhost:5173/?template=custom
-   ```
-
 ## Building for Production
 
-Build the project:
+Build the optimized output:
 ```bash
 npm run build
 ```
@@ -76,3 +57,18 @@ Preview the production build:
 ```bash
 npm run preview
 ```
+
+## Testing with Custom JSON
+
+If you want to render slides from your own JSON (for example, testing API-generated output), you can use the built-in localStorage loader:
+
+1. Open the **slider.html** page in your browser (e.g., <http://localhost:5173/slider.html>).
+2. Open the browser console and paste your JSON into a variable, then store it in localStorage:
+
+   ```js
+   const customConfig = { /* your JSON presentation config */ };
+   localStorage.setItem('generatedSlides', JSON.stringify(customConfig));
+   window.location.reload();
+   ```
+
+The slideshow will render your custom slides on reload.
