@@ -1,0 +1,12 @@
+/* borders.css */
+:root {
+    /* Borders */
+    --border-radius-small: 4px;
+    --border-radius-medium: 8px;
+    --border-radius-large: 16px;
+    --border-standard: 1px solid var(--border-color);
+    --border-hover: 1px solid var(--border-color);
+    --border-focus: 1px solid var(--border-color);
+    --border-dashed: 2px dashed var(--border-color-lighter);
+    --border-radius: var(--border-radius-small);
+}

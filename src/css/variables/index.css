@@ -1,0 +1,50 @@
+/* index.css */
+/* Import all variable files */
+@import './colors.css';
+@import './typography.css';
+@import './spacing.css';
+@import './borders.css';
+@import './effects.css';
+@import './components.css';
+
+/* Global styles that were in the original variables.css */
+*::-webkit-scrollbar {
+    width: 8px; /* Width of the vertical scrollbar */
+    height: 8px; /* Height of the horizontal scrollbar */
+}
+
+*::-webkit-scrollbar-track {
+    background: var(--background-color-tertiary); /* Track color */
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: var(--background-color-hover); /* Handle color */
+    border-radius: var(--border-radius-small); /* Rounded corners for the handle */
+    border: 3px solid var(--background-color-tertiary); /* Optional: Creates a margin effect around the thumb */
+}
+
+/* Optional: Style for scrollbar on hover */
+*::-webkit-scrollbar-thumb:hover {
+    background-color: var(--accent-color-hover); /* Darker or different color on hover */
+}
+
+* {
+    scrollbar-width: thin; /* "auto" or "thin" */
+    scrollbar-color: var(--background-color-hover) var(--background-color-tertiary); /* thumb and track color */
+}
+
+body {
+    font-size: var(--font-size-base);
+    color: var(--text-color);
+    background-color: var(--background-color-primary);
+    margin: 0;
+    padding: 0;
+}
+
+[aria-hidden="true"] {
+    display: none;
+}
+
+html {
+    font-size: var(--font-size-base);
+}

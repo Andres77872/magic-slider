@@ -1,0 +1,23 @@
+/* effects.css */
+:root {
+    /* Transitions */
+    --transition-colors: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+    --transition-standard: 0.2s ease-in-out;
+
+    /* Animations */
+    --spin-animation: 1s linear infinite;
+
+    /* Shadows */
+    --box-shadow-hover: 0 4px 6px rgba(0, 0, 0, 0.2);
+    --box-shadow-focus: 0 0 0 1px var(--border-color);
+    --box-shadow-active: 0 2px 3px rgba(0, 0, 0, 0.1);
+    --box-shadow-light: 0 2px 3px rgba(0, 0, 0, 0.1);
+    --box-shadow-dark: 0 0 10px rgba(0, 0, 0, 0.4);
+    --box-shadow: var(--box-shadow-light);
+
+    /* Focus */
+    --focus-outline: 3px solid var(--accent-color);
+
+    /* Transforms */
+    --hover-scale: 1.1;
+}

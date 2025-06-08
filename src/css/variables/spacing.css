@@ -1,0 +1,52 @@
+/* spacing.css */
+:root {
+    /* Base Spacing Scale */
+    --space-xxs: 0.25rem;   /* 4px */
+    --space-xs: 0.5rem;     /* 8px */
+    --space-sm: 0.75rem;    /* 12px */
+    --space-md: 1rem;       /* 16px */
+    --space-lg: 1.5rem;     /* 24px */
+    --space-xl: 2rem;       /* 32px */
+    --space-xxl: 3rem;      /* 48px */
+    --space-xxxl: 4rem;     /* 64px */
+
+    /* Padding Variables - Using the spacing scale */
+    --padding-xxs: var(--space-xxs);
+    --padding-xs: var(--space-xs);
+    --padding-small: var(--space-xs);
+    --padding-sm: var(--space-sm);
+    --padding-medium: var(--space-md);
+    --padding-lg: var(--space-lg);
+    --padding-large: var(--space-lg);
+    --padding-xl: var(--space-xl);
+    --padding-xxl: var(--space-xxl);
+
+    /* Margin Variables - Using the spacing scale */
+    --margin-xxs: var(--space-xxs);
+    --margin-xs: var(--space-xs);
+    --margin-small: var(--space-xs);
+    --margin-sm: var(--space-sm);
+    --margin-medium: var(--space-md);
+    --margin-lg: var(--space-lg);
+    --margin-large: var(--space-lg);
+    --margin-xl: var(--space-xl);
+    --margin-xxl: var(--space-xxl);
+
+    /* Gap Variables - Using the spacing scale */
+    --gap-xxs: var(--space-xxs);
+    --gap-xs: var(--space-xs);
+    --gap-small: var(--space-xs);
+    --gap-sm: var(--space-sm);
+    --gap-medium: var(--space-md);
+    --gap-lg: var(--space-lg);
+    --gap-large: var(--space-lg);
+    --gap-xl: var(--space-xl);
+    --gap-xxl: var(--space-xxl);
+
+    /* Header-specific spacing */
+    --header-padding-vertical: var(--space-sm);
+    --header-padding-horizontal: var(--space-lg);
+    --header-height: 4rem; /* Fixed header height */
+    --header-item-gap: var(--space-md);
+    --header-nav-item-gap: var(--space-lg);
+}

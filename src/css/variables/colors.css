@@ -1,0 +1,51 @@
+/* colors.css */
+:root {
+    /* Primary Background Colors */
+    --background-color-website: #121212; /* Deeper black for website background */
+    --background-color-primary: #1a1a1a; /* Slightly lighter black for primary containers */
+    --background-color-secondary: #242424; /* Dark gray for secondary elements */
+    --background-color-tertiary: #2c2c2c; /* Slightly lighter for tertiary elements */
+    --background-color-hover: #333333; /* Subtle hover state */
+    --background-color-focus: #3a3a3a; /* Subtle focus state */
+    --background-color-disable: #1e1e1e; /* Darker for disabled elements */
+    --background-color-header: #1a1a1a; /* Specific color for header background */
+
+    /* Text Colors */
+    --text-color: #f5f5f5; /* Slightly off-white for better eye comfort */
+    --text-color-secondary: #b0b0b0; /* Medium gray for secondary text */
+    --text-color-tertiary: #8a8a8a; /* Darker gray for less emphasis */
+    --text-color-placeholder: #707070; /* Darker gray for placeholders */
+    --text-color-header: #f5f5f5; /* Specific color for header text */
+
+    /* Border Colors */
+    --border-color: #333333; /* Dark gray for borders */
+    --border-color-lighter: #444444; /* Slightly lighter for emphasis */
+    --border-color-header: #333333; /* Specific color for header borders */
+
+    /* Accent Colors (Improved palette with better contrast) */
+    --accent-color: #7a84b8; /* Brighter indigo for better visibility */
+    --accent-color-hover: #5a6498; /* Darker indigo for hover states */
+    --accent-color-secondary: #9ba4d0; /* Lighter indigo for secondary elements */
+    --accent-color-muted: #4d5680; /* Muted indigo for subtle accents */
+
+    /* Status Message Colors (improved contrast for better readability) */
+    --color-messages-info: #5aa0c4; /* Brighter info blue */
+    --color-messages-success: #5d9573; /* Brighter success green */
+    --color-messages-error: #d16c6c; /* Brighter error red */
+    --color-messages-warning: #c59d5a; /* Brighter warning amber */
+
+    /* Miscellaneous Colors */
+    --color-dark: #0a0a0a; /* Very dark for special cases */
+    --color-hover-secondary: #2a2a2a; /* Alternative hover state */
+    --color-footer: #121212; /* Match website background for footer */
+    --color-brighter: #ffffff; /* Pure white for high contrast elements */
+
+    /* Transparency */
+    --background-transparency-standard: rgba(0, 0, 0, 0.6);
+    --background-transparency-light: rgba(0, 0, 0, 0.3);
+    --background-transparency-dark: rgba(0, 0, 0, 0.8);
+    --background-transparency: var(--background-transparency-dark);
+
+    /* Header-specific transparency */
+    --header-transparency: rgba(26, 26, 26, 0.95); /* Semi-transparent header background */
+}

@@ -1,0 +1,54 @@
+/* typography.css */
+:root {
+    /* Font Families */
+    --font-family-base: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    --font-family-heading: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    --font-family-mono: 'Roboto Mono', 'SF Mono', 'Fira Mono', 'Courier New', Courier, monospace;
+
+    /* Font Sizes - Modular Scale */
+    --font-size-base: 16px;
+    --font-size-xs: 0.75rem;    /* 12px */
+    --font-size-sm: 0.875rem;   /* 14px */
+    --font-size-small: 0.875rem; /* 14px - for backward compatibility */
+    --font-size-md: 1rem;       /* 16px */
+    --font-size-normal: 1rem;   /* 16px - for backward compatibility */
+    --font-size-lg: 1.125rem;   /* 18px */
+    --font-size-xl: 1.25rem;    /* 20px */
+    --font-size-large: 1.25rem; /* 20px - for backward compatibility */
+    --font-size-2xl: 1.5rem;    /* 24px */
+    --font-size-3xl: 1.875rem;  /* 30px */
+    --font-size-4xl: 2.25rem;   /* 36px */
+    --font-size-5xl: 3rem;      /* 48px */
+    --font-size-6xl: 3.75rem;   /* 60px */
+
+    /* Font Weights */
+    --font-weight-light: 300;
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+
+    /* Line Heights */
+    --line-height-tight: 1.2;
+    --line-height-normal: 1.5;
+    --line-height-relaxed: 1.75;
+
+    /* Letter Spacing */
+    --letter-spacing-tight: -0.025em;
+    --letter-spacing-normal: 0;
+    --letter-spacing-wide: 0.025em;
+
+    /* Header Typography */
+    --header-font-family: var(--font-family-heading);
+    --header-font-size: var(--font-size-lg);
+    --header-font-weight: var(--font-weight-medium);
+    --header-line-height: var(--line-height-tight);
+    --header-letter-spacing: var(--letter-spacing-normal);
+
+    /* Navigation Typography */
+    --nav-font-family: var(--font-family-base);
+    --nav-font-size: var(--font-size-md);
+    --nav-font-weight: var(--font-weight-medium);
+    --nav-line-height: var(--line-height-tight);
+    --nav-letter-spacing: var(--letter-spacing-normal);
+}
