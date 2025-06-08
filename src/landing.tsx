@@ -138,35 +138,9 @@ class SliderGenerator {
     const BASE_URL = 'https://magic.arz.ai/chat/openai/v1/completion'
     const API_KEY = 'None'
     const MODEL = 'agt-4a061995-772c-4241-bec9-0ce7d2f5897e'
-
-    const systemPrompt = `
-      You are a presentation generator. Create a reveal.js presentation based on the user's request.
-      Your response must be a valid JSON object with the following structure:
-      {
-        "plugins": ["highlight", "notes"], // Optional, include only if needed
-        "revealOptions": {}, // Optional, include only if needed
-        "slides": [
-          {
-            "title": "Slide Title", // Optional
-            "content": "<p>Slide content in HTML</p>", // Optional
-            "backgroundImage": "https://example.com/image.jpg", // Optional
-            "attributes": { // Optional
-              "data-note": "Speaker notes for this slide"
-            }
-          }
-          // More slides...
-        ]
-      }
-
-      Make sure the JSON is valid and follows the reveal.js format.
-      For code examples, use <pre><code class="language-xxx">...</code></pre> format.
-      For speaker notes, use the "attributes" property with "data-note".
-    `
-
     const requestBody = {
       model: MODEL,
       messages: [
-        { role: "system", content: systemPrompt },
         { role: "user", content: prompt }
       ],
       stream: true
