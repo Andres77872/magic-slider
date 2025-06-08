@@ -25,33 +25,60 @@ const pluginMap: Record<string, any> = {
 
 class MagicSlider extends HTMLElement {
   async connectedCallback() {
+    // Listen for slidesGenerated event
+    this.addEventListener('slidesGenerated', ((event: CustomEvent<PresentationConfig>) => {
+      this.renderSlides(event.detail)
+    }) as EventListener)
+
     const templateAttr = this.getAttribute('template')
     const params = new URLSearchParams(window.location.search)
     const template = templateAttr || params.get('template') || 'basic'
 
+    // Check if we have generated slides in localStorage
+    const generatedSlides = localStorage.getItem('generatedSlides')
+    if (generatedSlides) {
+      try {
+        const config = JSON.parse(generatedSlides) as PresentationConfig
+        this.renderSlides(config)
+        return
+      } catch (error) {
+        console.error('Failed to parse generated slides:', error)
+        // Continue with template loading if parsing fails
+      }
+    }
+
     try {
       const response = await fetch(`/templates/${template}.json`)
       const config = (await response.json()) as PresentationConfig
-
-      this.innerHTML = `
-        <div class="reveal">
-          <div class="slides"></div>
-        </div>
-      `
-
-      this.createSlides(config)
-      const selectedPlugins = (config.plugins || [])
-        .map((name) => pluginMap[name])
-        .filter(Boolean)
-
-      Reveal.initialize({
-        hash: true,
-        ...config.revealOptions,
-        plugins: selectedPlugins,
-      })
+      this.renderSlides(config)
     } catch (error) {
       console.error('Failed to load presentation config:', error)
     }
+  }
+
+  renderSlides(config: PresentationConfig): void {
+    // Initialize the reveal container
+    this.innerHTML = `
+      <div class="reveal">
+        <div class="slides"></div>
+      </div>
+    `
+
+    this.createSlides(config)
+    const selectedPlugins = (config.plugins || [])
+      .map((name) => pluginMap[name])
+      .filter(Boolean)
+
+    // If Reveal is already initialized, destroy it first
+    if (typeof Reveal.destroy === 'function') {
+      Reveal.destroy()
+    }
+
+    Reveal.initialize({
+      hash: true,
+      ...config.revealOptions,
+      plugins: selectedPlugins,
+    })
   }
 
   private createSlides(config: PresentationConfig): void {
