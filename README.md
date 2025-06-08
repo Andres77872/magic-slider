@@ -1,54 +1,78 @@
-# React + TypeScript + Vite
+# Magic Slider
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A JSON-driven template project to generate [Reveal.js](https://revealjs.com/) presentations dynamically from JSON templates.
 
-Currently, two official plugins are available:
+## Getting Started
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+Install dependencies:
+```bash
+npm install
+# or yarn
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Start the development server:
+```bash
+npm run dev
+```
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Open http://localhost:5173 in your browser. The default template _basic_ will be loaded.
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
+## Usage
+
+Templates are JSON files located in `public/templates`. You can select a template by adding a `template` query parameter to the URL.
+
+- **basic**: Basic slides example
+- **code-highlight**: Slide with syntax-highlighted code sample
+- **image-background**: Slide with a background image
+- **with-notes**: Slide with speaker notes
+
+For example:
+```text
+http://localhost:5173/?template=code-highlight
+```
+
+### Template Format
+
+Each template must define an array of slides and can optionally include Reveal.js options and plugins:
+
+```json
+{
+  "revealOptions": {
+    "hash": true,
+    "slideNumber": true
   },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+  "plugins": ["highlight", "notes"],
+  "slides": [
+    {
+      "title": "Slide Title",
+      "content": "<p>HTML content for the slide.</p>",
+      "backgroundImage": "path/to/image.jpg",
+      "attributes": {
+        "data-state": "intro",
+        "data-note": "Speaker notes here"
+      }
+    }
+  ]
+}
+```
+
+## Creating Your Own Template
+
+1. Add a JSON file in `public/templates` (e.g., `custom.json`).
+2. Define your `slides`, optional `plugins`, and `revealOptions` as shown above.
+3. Open the presentation with your template:
+   ```text
+   http://localhost:5173/?template=custom
+   ```
+
+## Building for Production
+
+Build the project:
+```bash
+npm run build
+```
+
+Preview the production build:
+```bash
+npm run preview
 ```
