@@ -3,13 +3,15 @@ import type { PresentationConfig } from '../types'
 
 interface ChatbotProps {
   onGenerate: (config: PresentationConfig) => void
+  onGeneratingStateChange?: (generating: boolean) => void
 }
 
-const Chatbot: React.FC<ChatbotProps> = ({ onGenerate }) => {
+const Chatbot: React.FC<ChatbotProps> = ({ onGenerate, onGeneratingStateChange }) => {
   const [prompt, setPrompt] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [resultJson, setResultJson] = useState('')
+  const [showJson, setShowJson] = useState(false)
 
   const fetchSlides = async (userPrompt: string) => {
     const apiKey = 'NONE'
@@ -60,12 +62,14 @@ const Chatbot: React.FC<ChatbotProps> = ({ onGenerate }) => {
 
   const handleGenerate = async () => {
     if (!prompt.trim()) {
-      setError('Please enter a prompt')
+      setError('Please enter a prompt describing your presentation')
       return
     }
     setLoading(true)
     setError(null)
     setResultJson('')
+    onGeneratingStateChange?.(true)
+    
     try {
       const raw = await fetchSlides(prompt)
       let trimmed = raw.trim()
@@ -77,36 +81,107 @@ const Chatbot: React.FC<ChatbotProps> = ({ onGenerate }) => {
       setError(err instanceof Error ? err.message : String(err))
     } finally {
       setLoading(false)
+      onGeneratingStateChange?.(false)
     }
   }
 
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault()
       handleGenerate()
     }
   }
 
+  const examplePrompts = [
+    "Create a 5-slide presentation about sustainable energy solutions",
+    "Build a marketing pitch for a new mobile app",
+    "Make slides about machine learning basics for beginners",
+    "Create a quarterly business review presentation"
+  ]
+
   return (
     <div className="chatbot-container">
-      <div className="input-group">
-        <label htmlFor="prompt-input">Describe your presentation:</label>
-        <input
-          id="prompt-input"
-          type="text"
-          placeholder='E.g., "3-slide presentation about AI"'
-          value={prompt}
-          onChange={(e) => setPrompt(e.target.value)}
-          onKeyPress={handleKeyPress}
-          disabled={loading}
-        />
+      <div className="chatbot-form">
+        <div className="input-group">
+          <label htmlFor="prompt-input" className="input-label">
+            What kind of presentation would you like to create?
+          </label>
+          <textarea
+            id="prompt-input"
+            className="form-control prompt-textarea"
+            placeholder="Describe your presentation... (e.g., '5-slide pitch about renewable energy for investors')"
+            value={prompt}
+            onChange={(e) => setPrompt(e.target.value)}
+            onKeyPress={handleKeyPress}
+            disabled={loading}
+            rows={4}
+          />
+          <div className="input-help">
+            <span>💡 Tip: Be specific about the topic, audience, and number of slides you want</span>
+          </div>
+        </div>
+
+        <div className="action-group">
+          <button 
+            className="btn btn-primary btn-generate"
+            onClick={handleGenerate} 
+            disabled={loading || !prompt.trim()}
+          >
+            {loading ? (
+              <>
+                <div className="btn-spinner"></div>
+                Generating...
+              </>
+            ) : (
+              <>
+                <span className="btn-icon">✨</span>
+                Generate Slides
+              </>
+            )}
+          </button>
+        </div>
+
+        {error && (
+          <div className="alert alert-error">
+            <span className="alert-icon">⚠️</span>
+            <span>{error}</span>
+          </div>
+        )}
+
+        {resultJson && (
+          <div className="result-section">
+            <div className="result-header">
+              <h4>Generation Progress</h4>
+              <button 
+                className="btn btn-sm btn-outline"
+                onClick={() => setShowJson(!showJson)}
+              >
+                {showJson ? 'Hide' : 'Show'} JSON
+              </button>
+            </div>
+            {showJson && (
+              <pre className="result-json">{resultJson}</pre>
+            )}
+          </div>
+        )}
       </div>
-      <button onClick={handleGenerate} disabled={loading}>
-        {loading ? 'Generating...' : 'Generate Slides'}
-      </button>
-      {error && <div className="error">{error}</div>}
-      {resultJson && (
-        <pre className="result-json">{resultJson}</pre>
-      )}
+
+      {/* Example Prompts */}
+      <div className="examples-section">
+        <h4 className="examples-title">Try these examples:</h4>
+        <div className="examples-grid">
+          {examplePrompts.map((example, index) => (
+            <button
+              key={index}
+              className="example-prompt"
+              onClick={() => setPrompt(example)}
+              disabled={loading}
+            >
+              {example}
+            </button>
+          ))}
+        </div>
+      </div>
     </div>
   )
 }
