@@ -1,0 +1,95 @@
+{
+  "title": "Magic Slider showcase",
+  "language": "en",
+  "theme": "ocean",
+  "plugins": ["notes", "highlight"],
+  "revealOptions": { "controls": true, "progress": true, "slideNumber": true, "transition": "slide" },
+  "slides": [
+    {
+      "layout": "title",
+      "kicker": "Showcase deck",
+      "title": "Every layout Magic Slider can present",
+      "subtitle": "A reference deck for the presentation agent and renderer",
+      "backgroundImage": "https://v3.fal.media/files/example/cover.jpg",
+      "notes": "Welcome the audience and explain that each slide demonstrates one layout."
+    },
+    {
+      "layout": "section",
+      "kicker": "Part 1",
+      "title": "Structure the story",
+      "subtitle": "Sections divide the narrative into clear chapters",
+      "notes": "Section slides give the audience a moment to reset between parts."
+    },
+    {
+      "layout": "content",
+      "title": "One idea per slide keeps attention on the point",
+      "content": "Lead with a takeaway title\nKeep two to five short points\nMove detail into speaker notes",
+      "fragments": true,
+      "notes": "Points appear one at a time because fragments are enabled on this slide."
+    },
+    {
+      "layout": "split",
+      "title": "Images sit beside the words they support",
+      "content": "Square or portrait images suit split slides\nAlt text keeps them accessible",
+      "image": { "url": "https://v3.fal.media/files/example/detail.jpg", "alt": "Abstract blue shapes arranged like stacked slides", "caption": "Generated illustration", "position": "right" },
+      "notes": "Generated images are illustrations, never evidence."
+    },
+    {
+      "layout": "statement",
+      "title": "A good slide is read in three seconds.",
+      "content": "Everything else belongs in the speaker notes.",
+      "notes": "Pause here and let the statement land."
+    },
+    {
+      "layout": "stats",
+      "title": "Reveal.js presents slides in the browser",
+      "stats": [
+        { "value": "16:9", "label": "Slide canvas used by the preview and export" },
+        { "value": "6", "label": "Curated themes available to every deck" },
+        { "value": "50", "label": "Maximum slides in one deck" }
+      ],
+      "sources": [{ "title": "reveal.js documentation", "url": "https://revealjs.com/" }],
+      "notes": "Figures describe this application; the source documents the underlying framework."
+    },
+    {
+      "layout": "comparison",
+      "title": "Choose the edit that matches the request",
+      "columns": [
+        { "heading": "Targeted edit", "content": "Change one field\nKeep every other slide" },
+        { "heading": "Full replacement", "content": "Only when explicitly requested\nRebuilds the whole deck" }
+      ],
+      "notes": "Targeted edits preserve the work the user already approved."
+    },
+    {
+      "layout": "timeline",
+      "title": "From request to finished deck",
+      "timeline": [
+        { "label": "Research", "text": "Current facts with sources from the web" },
+        { "label": "Visuals", "text": "Original images in one art direction" },
+        { "label": "Authoring", "text": "Validated slide actions for the browser" }
+      ],
+      "fragments": true,
+      "notes": "Research and visuals run at the same time before authoring starts."
+    },
+    {
+      "layout": "quote",
+      "title": "Presentations are plain HTML",
+      "quote": { "text": "reveal.js is an open source HTML presentation framework.", "attribution": "reveal.js documentation" },
+      "sources": [{ "title": "reveal.js documentation", "url": "https://revealjs.com/" }],
+      "notes": "Quotes must be verbatim and sourced."
+    },
+    {
+      "layout": "content",
+      "title": "Technical decks can show highlighted code",
+      "code": { "language": "typescript", "source": "const deck = validatePresentation(input)\nif (!deck.ok) throw deck.error" },
+      "notes": "Code slides load the highlight plugin automatically."
+    },
+    {
+      "layout": "closing",
+      "title": "Describe it, refine it, present it",
+      "subtitle": "Start a new deck from the home screen",
+      "backgroundImage": "https://v3.fal.media/files/example/closing.jpg",
+      "notes": "Close with the call to action."
+    }
+  ]
+}
