@@ -1,0 +1,9 @@
+{
+  "slides": [
+    {
+      "backgroundImage": "https://placekitten.com/800/600",
+      "title": "Slide with Image Background",
+      "content": "A cute kitten background."
+    }
+  ]
+}

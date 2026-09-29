@@ -1,12 +1,6 @@
-export interface Slide {
-  title?: string
-  content?: string
-  backgroundImage?: string
-  attributes?: Record<string, string>
-}
+import type { ValidatedPresentationConfig, ValidatedSlide } from './domain/presentationTypes'
 
-export interface PresentationConfig {
-  revealOptions?: Record<string, unknown>
-  plugins?: ('highlight' | 'notes')[]
-  slides: Slide[]
-}
+export type Slide = ValidatedSlide
+export type PresentationConfig = ValidatedPresentationConfig
+
+export type { SafeRevealOptions, SafeRevealOptionsInput, ValidatedPresentationConfig, ValidatedSlide } from './domain/presentationTypes'

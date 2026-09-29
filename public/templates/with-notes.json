@@ -1,0 +1,10 @@
+{
+  "plugins": ["notes"],
+  "slides": [
+    {
+      "title": "Slide with Speaker Notes",
+      "content": "This slide includes speaker notes.",
+      "notes": "These are speaker notes for this slide."
+    }
+  ]
+}

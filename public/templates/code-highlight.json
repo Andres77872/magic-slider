@@ -1,0 +1,9 @@
+{
+  "plugins": ["highlight"],
+  "slides": [
+    {
+      "title": "Code Highlight Slide",
+      "code": { "language": "javascript", "source": "console.log('Hello, world!');" }
+    }
+  ]
+}

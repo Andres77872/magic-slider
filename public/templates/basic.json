@@ -1,0 +1,12 @@
+{
+  "slides": [
+    {
+      "title": "Welcome to Magic Slider",
+      "content": "This is a basic reveal.js presentation generated from JSON."
+    },
+    {
+      "title": "Using JSON",
+      "content": "Define your slides in JSON templates and generate presentations dynamically."
+    }
+  ]
+}
