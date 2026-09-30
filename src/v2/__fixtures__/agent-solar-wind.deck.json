@@ -1,0 +1,559 @@
+{
+ "title": "Solar and wind power in 2026 | City council briefing",
+ "language": "en",
+ "theme": {
+  "preset": "ocean",
+  "fonts": {
+   "heading": "grotesk",
+   "body": "inter"
+  },
+  "radius": "lg"
+ },
+ "settings": {
+  "aspectRatio": "16:9",
+  "transition": "fade",
+  "controls": true,
+  "progress": true,
+  "slideNumber": true
+ },
+ "slides": [
+  {
+   "id": "cover",
+   "name": "2026 briefing",
+   "align": "bottom",
+   "padding": "2xl",
+   "background": {
+    "image": {
+     "src": "https://v3b.fal.media/files/b/0aac68e6/UVpZ-FCqiFcWv8X6EaVsp_LyZMqP9h.jpg",
+     "alt": "Illustration of solar panels and distant wind turbines near a city skyline at dawn",
+     "fit": "cover",
+     "overlay": "gradient"
+    }
+   },
+   "blocks": [
+    {
+     "type": "text",
+     "id": "cover-kicker",
+     "text": "CITY COUNCIL BRIEFING  •  SEPTEMBER 2026",
+     "variant": "eyebrow",
+     "tone": "accent"
+    },
+    {
+     "type": "heading",
+     "id": "cover-title",
+     "text": "Solar and wind are scaling; ==local readiness determines value==",
+     "level": 1,
+     "size": "display",
+     "maxWidth": "lg"
+    },
+    {
+     "type": "text",
+     "id": "cover-subtitle",
+     "text": "The latest complete global data are from 2025. Here is what they mean—and do not mean—for a city.",
+     "variant": "lead",
+     "maxWidth": "lg"
+    }
+   ],
+   "notes": "This is a 2026 decision briefing, grounded in the latest completed global year, 2025. Global momentum provides a reason to evaluate options, not proof that any particular city project is viable. We will separate observed generation, new capacity, costs and local implementation questions.",
+   "sources": [
+    {
+     "title": "Near-700 GW Surge in 2025 Proves Renewable Energy Resilience",
+     "url": "https://www.irena.org/News/pressreleases/2026/Apr/Near-700-GW-Surge-in-2025-Proves-Renewable-Energy-Resilience"
+    },
+    {
+     "title": "Flexibility – Electricity 2026",
+     "url": "https://www.iea.org/reports/electricity-2026/flexibility"
+    }
+   ]
+  },
+  {
+   "id": "additions",
+   "name": "2025 capacity additions",
+   "padding": "xl",
+   "gap": "lg",
+   "blocks": [
+    {
+     "type": "text",
+     "text": "01  /  SCALE",
+     "variant": "eyebrow",
+     "tone": "accent"
+    },
+    {
+     "type": "heading",
+     "text": "In 2025, ==solar led== another record year for renewables",
+     "level": 2
+    },
+    {
+     "type": "grid",
+     "columns": 3,
+     "gap": "lg",
+     "children": [
+      {
+       "type": "box",
+       "variant": "card",
+       "accentBar": "top",
+       "padding": "lg",
+       "children": [
+        {
+         "type": "stat",
+         "value": "511.2 GW",
+         "label": "Solar capacity added",
+         "icon": "sun",
+         "size": "xl",
+         "tone": "accent"
+        }
+       ]
+      },
+      {
+       "type": "box",
+       "variant": "card",
+       "accentBar": "top",
+       "padding": "lg",
+       "children": [
+        {
+         "type": "stat",
+         "value": "158.7 GW",
+         "label": "Wind capacity added",
+         "icon": "wind",
+         "size": "xl"
+        }
+       ]
+      },
+      {
+       "type": "box",
+       "variant": "soft",
+       "accentBar": "top",
+       "padding": "lg",
+       "children": [
+        {
+         "type": "stat",
+         "value": "85.6%",
+         "label": "Renewables’ share of all power-capacity additions",
+         "icon": "zap",
+         "size": "xl"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "text",
+     "text": "Global additions, not electricity generated. Source: IRENA, 2026.",
+     "variant": "caption",
+     "tone": "muted"
+    }
+   ],
+   "notes": "IRENA reports 692 GW of renewable capacity added in 2025, reaching 5,149 GW worldwide. Solar and wind additions are subsets of that figure; the 85.6% figure describes all renewables as a share of total power-capacity additions. Capacity added does not tell us how much electricity was generated or when it was available.",
+   "sources": [
+    {
+     "title": "Near-700 GW Surge in 2025 Proves Renewable Energy Resilience",
+     "url": "https://www.irena.org/News/pressreleases/2026/Apr/Near-700-GW-Surge-in-2025-Proves-Renewable-Energy-Resilience"
+    }
+   ]
+  },
+  {
+   "id": "solar-growth",
+   "name": "Solar installed capacity trend",
+   "padding": "xl",
+   "gap": "md",
+   "blocks": [
+    {
+     "type": "text",
+     "text": "02  /  TRAJECTORY",
+     "variant": "eyebrow",
+     "tone": "accent"
+    },
+    {
+     "type": "heading",
+     "text": "Global installed solar capacity reached ==2,392 GW== at end-2025",
+     "level": 2
+    },
+    {
+     "type": "grid",
+     "columns": "3fr 2fr",
+     "gap": "xl",
+     "align": "center",
+     "children": [
+      {
+       "type": "chart",
+       "kind": "area",
+       "labels": [
+        "2021",
+        "2022",
+        "2023",
+        "2024",
+        "2025"
+       ],
+       "series": [
+        {
+         "name": "Installed solar capacity",
+         "values": [
+          866.04,
+          1058.036,
+          1422.026,
+          1880.396,
+          2391.584
+         ]
+        }
+       ],
+       "valueSuffix": " GW",
+       "showGrid": true,
+       "highlight": 4,
+       "caption": "Year-end global solar capacity (GW). Source: IRENA, Renewable capacity statistics 2026."
+      },
+      {
+       "type": "stack",
+       "gap": "md",
+       "children": [
+        {
+         "type": "stat",
+         "value": "2,391.584 GW",
+         "label": "Installed worldwide at end-2025",
+         "size": "xl",
+         "tone": "accent"
+        },
+        {
+         "type": "callout",
+         "title": "Read the metric carefully",
+         "text": "This is **installed capacity**, not annual electricity output.",
+         "tone": "info",
+         "icon": "info"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "notes": "The chart reproduces IRENA's year-end installed solar capacity series for 2021–2025. End-2025 capacity rose from 1,880.396 GW at end-2024 to 2,391.584 GW. Capacity is a stock measured in GW; it should not be equated with generation in TWh.",
+   "sources": [
+    {
+     "title": "Renewable capacity statistics 2026",
+     "url": "https://www.irena.org/-/media/Files/IRENA/Agency/Publication/2026/Mar/IRENA_DAT_RE_capacity_statistics_2026.pdf"
+    }
+   ]
+  },
+  {
+   "id": "electricity-share",
+   "name": "Electricity generation share",
+   "tone": "inverse",
+   "padding": "xl",
+   "gap": "lg",
+   "blocks": [
+    {
+     "type": "text",
+     "text": "03  /  ELECTRICITY ACTUALLY GENERATED",
+     "variant": "eyebrow",
+     "tone": "accent"
+    },
+    {
+     "type": "heading",
+     "text": "Solar and wind supplied ==about 17%== of global electricity in 2025",
+     "level": 2
+    },
+    {
+     "type": "grid",
+     "columns": "2fr 1fr",
+     "gap": "xl",
+     "align": "center",
+     "children": [
+      {
+       "type": "box",
+       "variant": "glass",
+       "padding": "xl",
+       "children": [
+        {
+         "type": "stat",
+         "value": "~17%",
+         "label": "Solar + wind share of global electricity, 2025",
+         "size": "2xl",
+         "tone": "accent"
+        },
+        {
+         "type": "text",
+         "text": "Generation share, not installed-capacity share",
+         "variant": "caption",
+         "tone": "muted"
+        }
+       ]
+      },
+      {
+       "type": "stack",
+       "gap": "md",
+       "children": [
+        {
+         "type": "stat",
+         "value": "33.8%",
+         "label": "All renewables’ share in 2025",
+         "size": "lg"
+        },
+        {
+         "type": "badge",
+         "text": "27% solar + wind by 2030: IEA forecast",
+         "tone": "accent",
+         "variant": "outline"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "text",
+     "text": "Sources: IEA, Electricity 2026; Ember, Global Electricity Review 2026.",
+     "variant": "caption",
+     "tone": "muted"
+    }
+   ],
+   "notes": "The IEA estimates solar and wind together provided approximately 17% of global generation in 2025 and forecasts a 27% share in 2030; that latter number is a projection, not an observed result. Ember reports a 33.8% 2025 share for all renewables, which includes technologies beyond solar and wind. These figures describe electricity supplied, rather than new installations.",
+   "sources": [
+    {
+     "title": "Supply – Electricity 2026",
+     "url": "https://www.iea.org/reports/electricity-2026/supply"
+    },
+    {
+     "title": "Global Electricity Review 2026",
+     "url": "https://ember-energy.org/latest-insights/global-electricity-review-2026"
+    }
+   ]
+  },
+  {
+   "id": "generation-costs",
+   "name": "Global new-generation costs",
+   "padding": "xl",
+   "gap": "lg",
+   "blocks": [
+    {
+     "type": "text",
+     "text": "04  /  ECONOMICS",
+     "variant": "eyebrow",
+     "tone": "accent"
+    },
+    {
+     "type": "heading",
+     "text": "New solar and onshore wind are ==cost-competitive globally==",
+     "level": 2
+    },
+    {
+     "type": "grid",
+     "columns": 3,
+     "gap": "lg",
+     "children": [
+      {
+       "type": "box",
+       "variant": "card",
+       "padding": "lg",
+       "accentBar": "top",
+       "children": [
+        {
+         "type": "icon",
+         "name": "sun",
+         "variant": "circle",
+         "tone": "accent",
+         "size": "lg"
+        },
+        {
+         "type": "stat",
+         "value": "$44",
+         "label": "Solar PV • USD/MWh",
+         "size": "xl"
+        }
+       ]
+      },
+      {
+       "type": "box",
+       "variant": "soft",
+       "padding": "lg",
+       "accentBar": "top",
+       "children": [
+        {
+         "type": "icon",
+         "name": "wind",
+         "variant": "circle",
+         "tone": "accent",
+         "size": "lg"
+        },
+        {
+         "type": "stat",
+         "value": "$33",
+         "label": "Onshore wind • USD/MWh",
+         "size": "xl"
+        }
+       ]
+      },
+      {
+       "type": "box",
+       "variant": "card",
+       "padding": "lg",
+       "accentBar": "top",
+       "children": [
+        {
+         "type": "icon",
+         "name": "droplets",
+         "variant": "circle",
+         "tone": "accent",
+         "size": "lg"
+        },
+        {
+         "type": "stat",
+         "value": "$78",
+         "label": "Offshore wind • USD/MWh",
+         "size": "xl"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "callout",
+     "text": "These are **2025 global weighted-average levelised costs** for new plants—not local bids or all-hour delivered prices.",
+     "tone": "info",
+     "icon": "info"
+    },
+    {
+     "type": "text",
+     "text": "Source: IRENA, Renewable power generation costs in 2025.",
+     "variant": "caption",
+     "tone": "muted"
+    }
+   ],
+   "notes": "IRENA reports global weighted-average levelised costs of USD 44/MWh for new solar PV, USD 33/MWh for onshore wind and USD 78/MWh for offshore wind commissioned in 2025. More than 90% of utility-scale renewables commissioned that year were cheaper than the cheapest new fossil-fuel alternative in their respective markets, according to IRENA. Council should not substitute these world averages for city-specific bids, grid costs or delivered hourly prices.",
+   "sources": [
+    {
+     "title": "Renewable power generation costs in 2025",
+     "url": "https://www.irena.org/Publications/2026/Jul/Renewable-Power-Generation-Costs-in-2025"
+    }
+   ]
+  },
+  {
+   "id": "grid-flexibility",
+   "name": "Grid flexibility requirement",
+   "padding": "xl",
+   "gap": "lg",
+   "blocks": [
+    {
+     "type": "text",
+     "text": "05  /  SYSTEM DESIGN",
+     "variant": "eyebrow",
+     "tone": "accent"
+    },
+    {
+     "type": "heading",
+     "text": "The next constraint is ==matching clean output to demand==",
+     "level": 2
+    },
+    {
+     "type": "diagram",
+     "kind": "flow",
+     "direction": "horizontal",
+     "stagger": true,
+     "items": [
+      {
+       "label": "Solar + wind",
+       "text": "Variable output",
+       "icon": "sun"
+      },
+      {
+       "label": "Grid readiness",
+       "text": "Connection and capacity",
+       "icon": "grid"
+      },
+      {
+       "label": "Batteries",
+       "text": "Shift supply across hours",
+       "icon": "battery"
+      },
+      {
+       "label": "Flexible demand",
+       "text": "Shift use where practical",
+       "icon": "gauge"
+      }
+     ]
+    },
+    {
+     "type": "callout",
+     "title": "Council implication",
+     "text": "Evaluate supply **together with** connection needs, storage and demand flexibility.",
+     "tone": "accent",
+     "icon": "lightbulb"
+    },
+    {
+     "type": "text",
+     "text": "System-flexibility evidence: IEA, Electricity 2026.",
+     "variant": "caption",
+     "tone": "muted"
+    }
+   ],
+   "notes": "The IEA identifies batteries and flexible demand as means to shift renewable electricity toward periods when demand is higher. The flow is a decision framework rather than a claim that each technology must be built locally or in this exact order. Grid access and operating patterns need examination before procurement or capital commitments.",
+   "sources": [
+    {
+     "title": "Flexibility – Electricity 2026",
+     "url": "https://www.iea.org/reports/electricity-2026/flexibility"
+    }
+   ]
+  },
+  {
+   "id": "council-decision",
+   "name": "Council next steps",
+   "tone": "accent",
+   "align": "center",
+   "padding": "2xl",
+   "gap": "lg",
+   "background": {
+    "gradient": "ocean"
+   },
+   "blocks": [
+    {
+     "type": "text",
+     "text": "06  /  DECISION FOR COUNCIL",
+     "variant": "eyebrow"
+    },
+    {
+     "type": "heading",
+     "text": "Commission a ==local options assessment== before choosing projects",
+     "level": 1,
+     "maxWidth": "lg"
+    },
+    {
+     "type": "timeline",
+     "orientation": "horizontal",
+     "stagger": true,
+     "items": [
+      {
+       "label": "01",
+       "title": "Map local opportunity",
+       "text": "Roofs, land, wind resource and permitting",
+       "icon": "map-pin"
+      },
+      {
+       "label": "02",
+       "title": "Test deliverability",
+       "text": "Grid capacity, hourly demand and flexibility",
+       "icon": "grid"
+      },
+      {
+       "label": "03",
+       "title": "Compare real offers",
+       "text": "Local bids, procurement terms and risk",
+       "icon": "scale"
+      }
+     ]
+    },
+    {
+     "type": "text",
+     "text": "Global results establish momentum—not this city’s resource quality, tariffs or project economics.",
+     "variant": "caption"
+    }
+   ],
+   "notes": "The proposed council action is to authorize a scoped, local options assessment rather than select a technology on global averages alone. Assess local resources and permitting, network and hourly operating constraints, then compare actual offers and procurement structures. No city was specified, so this briefing makes no claim about site-level economics or grid availability.",
+   "sources": [
+    {
+     "title": "Renewable power generation costs in 2025",
+     "url": "https://www.irena.org/Publications/2026/Jul/Renewable-Power-Generation-Costs-in-2025"
+    },
+    {
+     "title": "Flexibility – Electricity 2026",
+     "url": "https://www.iea.org/reports/electricity-2026/flexibility"
+    }
+   ]
+  }
+ ]
+}

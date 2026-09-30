@@ -14,9 +14,11 @@
     "preview": "vite preview",
     "test": "vitest run",
     "typecheck": "tsc -p tsconfig.app.json --noEmit && tsc -p tsconfig.node.json --noEmit",
-    "dev:replay": "node scripts/dev-replay.mjs"
+    "dev:replay": "node scripts/dev-replay.mjs",
+    "agent:v2": "node scripts/build-agent-v2.mjs"
   },
   "dependencies": {
+    "lucide": "^1.48.0",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
     "reveal.js": "^6.0.2",

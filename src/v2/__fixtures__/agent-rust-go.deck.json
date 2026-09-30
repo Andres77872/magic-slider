@@ -1,0 +1,516 @@
+{
+ "title": "Rust vs Go for backend services in 2026",
+ "language": "en",
+ "theme": {
+  "preset": "ocean",
+  "fonts": {
+   "heading": "grotesk",
+   "body": "inter"
+  },
+  "radius": "lg",
+  "decoration": "none"
+ },
+ "settings": {
+  "aspectRatio": "16:9",
+  "transition": "fade",
+  "controls": true,
+  "progress": true,
+  "slideNumber": true
+ },
+ "slides": [
+  {
+   "id": "cover",
+   "name": "Rust and Go in 2026",
+   "align": "bottom",
+   "padding": "2xl",
+   "background": {
+    "image": {
+     "src": "https://v3b.fal.media/files/b/0aac6a43/n3OwEMkhLZszOzCxN81YJ_O6kMjNVP.jpg",
+     "alt": "Abstract metallic service modules connected by flowing paths against a dark navy background",
+     "fit": "cover",
+     "overlay": "gradient"
+    }
+   },
+   "blocks": [
+    {
+     "type": "text",
+     "id": "cover-eyebrow",
+     "text": "BACKEND ENGINEERING · 2026",
+     "variant": "eyebrow",
+     "tone": "accent"
+    },
+    {
+     "type": "heading",
+     "id": "cover-title",
+     "text": "Rust vs Go: ==two ways to build reliable backend services==",
+     "level": 1,
+     "size": "display",
+     "maxWidth": "lg"
+    },
+    {
+     "type": "text",
+     "id": "cover-subtitle",
+     "text": "Memory model, developer signals, and a practical decision rule.",
+     "variant": "lead",
+     "maxWidth": "md"
+    }
+   ],
+   "notes": "Frame this as a trade-off discussion, not a universal language ranking. We will compare memory and concurrency models, show a deliberately small code example, then separate developer-survey interest from actual backend adoption."
+  },
+  {
+   "id": "models",
+   "name": "The memory-model divide",
+   "padding": "xl",
+   "blocks": [
+    {
+     "type": "text",
+     "text": "01 / THE ARCHITECTURAL DIVIDE",
+     "variant": "eyebrow",
+     "tone": "accent"
+    },
+    {
+     "type": "heading",
+     "text": "Rust checks ownership at compile time; Go ==collects memory at runtime==",
+     "level": 2
+    },
+    {
+     "type": "grid",
+     "columns": "1fr 1fr",
+     "gap": "xl",
+     "align": "stretch",
+     "children": [
+      {
+       "type": "box",
+       "variant": "card",
+       "accentBar": "top",
+       "padding": "xl",
+       "children": [
+        {
+         "type": "icon",
+         "name": "shield-check",
+         "variant": "circle",
+         "tone": "accent",
+         "size": "lg"
+        },
+        {
+         "type": "heading",
+         "text": "Rust: ownership first",
+         "level": 3
+        },
+        {
+         "type": "text",
+         "text": "Memory safety without a garbage collector.",
+         "tone": "muted"
+        },
+        {
+         "type": "text",
+         "text": "Ownership and types catch many concurrency errors before execution.",
+         "variant": "caption"
+        }
+       ]
+      },
+      {
+       "type": "box",
+       "variant": "soft",
+       "accentBar": "top",
+       "padding": "xl",
+       "color": "accent2",
+       "children": [
+        {
+         "type": "icon",
+         "name": "recycle",
+         "variant": "circle",
+         "tone": "accent2",
+         "size": "lg"
+        },
+        {
+         "type": "heading",
+         "text": "Go: managed memory",
+         "level": 3
+        },
+        {
+         "type": "text",
+         "text": "A garbage-collected runtime manages reclamation.",
+         "tone": "muted"
+        },
+        {
+         "type": "text",
+         "text": "Go 1.26 made its Green Tea collector the default.",
+         "variant": "caption"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "sources": [
+    {
+     "title": "Understanding Ownership - The Rust Programming Language",
+     "url": "https://doc.rust-lang.org/book/ch04-00-understanding-ownership.html"
+    },
+    {
+     "title": "Fearless Concurrency - The Rust Programming Language",
+     "url": "https://doc.rust-lang.org/book/ch16-00-concurrency.html"
+    },
+    {
+     "title": "Go 1.26 Release Notes",
+     "url": "https://go.dev/doc/go1.26"
+    }
+   ],
+   "notes": "Ownership is a compile-time discipline: values have owners, and borrowing permits access without transferring ownership. The Rust book also describes how ownership and types make many concurrency mistakes compile-time errors. Go uses garbage collection, so the trade-off is a different memory-management model rather than simply one language being faster."
+  },
+  {
+   "id": "code",
+   "name": "Borrowing in a tiny service example",
+   "padding": "xl",
+   "blocks": [
+    {
+     "type": "text",
+     "text": "02 / AN ILLUSTRATIVE CODE EXAMPLE",
+     "variant": "eyebrow",
+     "tone": "accent"
+    },
+    {
+     "type": "heading",
+     "text": "A borrowed path can be read ==without moving its owner==",
+     "level": 2
+    },
+    {
+     "type": "grid",
+     "columns": "3fr 2fr",
+     "gap": "xl",
+     "align": "center",
+     "children": [
+      {
+       "type": "code",
+       "language": "rust",
+       "title": "Illustrative Rust routing fragment · std only",
+       "source": "fn route(path: &str) -> String {\n    format!(\"request: {path}\")\n}\n\nfn main() {\n    let path = String::from(\"/health\");\n    let response = route(&path);\n    println!(\"{response} — {path}\");\n}",
+       "lineNumbers": true,
+       "highlight": "1-3|6-8"
+      },
+      {
+       "type": "stack",
+       "gap": "lg",
+       "children": [
+        {
+         "type": "box",
+         "variant": "soft",
+         "padding": "lg",
+         "children": [
+          {
+           "type": "badge",
+           "text": "&path",
+           "tone": "accent",
+           "variant": "outline"
+          },
+          {
+           "type": "text",
+           "text": "The function borrows the path; the caller retains ownership."
+          }
+         ]
+        },
+        {
+         "type": "box",
+         "variant": "soft",
+         "padding": "lg",
+         "children": [
+          {
+           "type": "badge",
+           "text": "String",
+           "tone": "accent2",
+           "variant": "outline"
+          },
+          {
+           "type": "text",
+           "text": "The returned response owns its formatted text."
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "sources": [
+    {
+     "title": "Understanding Ownership - The Rust Programming Language",
+     "url": "https://doc.rust-lang.org/book/ch04-00-understanding-ownership.html"
+    }
+   ],
+   "notes": "This is an illustrative standard-library fragment, not a complete HTTP handler or a benchmark. Walk through the signature first: the function accepts a borrowed string slice and returns an owned String. After the call, the original path remains available to the caller."
+  },
+  {
+   "id": "comparison",
+   "name": "What changed for Go in 2026",
+   "padding": "xl",
+   "blocks": [
+    {
+     "type": "text",
+     "text": "03 / PRACTICAL COMPARISON",
+     "variant": "eyebrow",
+     "tone": "accent"
+    },
+    {
+     "type": "heading",
+     "text": "Go’s 2026 updates improve its runtime; ==the models stay different==",
+     "level": 2
+    },
+    {
+     "type": "table",
+     "columns": [
+      "Dimension",
+      "Rust",
+      "Go"
+     ],
+     "rows": [
+      [
+       "Memory",
+       "Ownership; no GC",
+       "Garbage-collected runtime"
+      ],
+      [
+       "Concurrency safety",
+       "Many errors caught by ownership and types",
+       "Synchronization remains a design concern"
+      ],
+      [
+       "2026 language/runtime",
+       "Ownership model remains the comparison point",
+       "1.26: Green Tea GC default; 1.27: generic methods"
+      ],
+      [
+       "Evolution",
+       "Evaluate library and team fit",
+       "Go 1 compatibility promise"
+      ]
+     ],
+     "highlightColumn": 2,
+     "striped": true,
+     "caption": "Go 1.26 projects 10–40% less GC overhead in GC-heavy programs—not 10–40% more service throughput."
+    }
+   ],
+   "sources": [
+    {
+     "title": "Understanding Ownership - The Rust Programming Language",
+     "url": "https://doc.rust-lang.org/book/ch04-00-understanding-ownership.html"
+    },
+    {
+     "title": "Fearless Concurrency - The Rust Programming Language",
+     "url": "https://doc.rust-lang.org/book/ch16-00-concurrency.html"
+    },
+    {
+     "title": "Go 1.26 Release Notes",
+     "url": "https://go.dev/doc/go1.26"
+    },
+    {
+     "title": "Go 1.27 Release Notes",
+     "url": "https://go.dev/doc/go1.27"
+    }
+   ],
+   "notes": "Go 1.26 enabled Green Tea GC by default; its projected 10–40% reduction concerns GC overhead for workloads that heavily use the collector. That number is not a service-throughput benchmark and says nothing quantitative about Rust versus Go. Go 1.27 adds generic methods and reiterates Go 1 compatibility; assess these updates separately from the architectural choice."
+  },
+  {
+   "id": "adoption",
+   "name": "Developer interest is not backend market share",
+   "padding": "xl",
+   "blocks": [
+    {
+     "type": "text",
+     "text": "04 / DEVELOPER SIGNALS · 2025 SURVEY",
+     "variant": "eyebrow",
+     "tone": "accent"
+    },
+    {
+     "type": "heading",
+     "text": "Rust leads on survey interest; ==neither metric is backend adoption==",
+     "level": 2
+    },
+    {
+     "type": "grid",
+     "columns": "1fr 1fr",
+     "gap": "lg",
+     "align": "stretch",
+     "children": [
+      {
+       "type": "box",
+       "variant": "card",
+       "padding": "md",
+       "children": [
+        {
+         "type": "chart",
+         "kind": "bar",
+         "title": "Admired",
+         "labels": [
+          "Rust",
+          "Go"
+         ],
+         "series": [
+          {
+           "name": "Admired",
+           "values": [
+            72.4,
+            56.5
+           ]
+          }
+         ],
+         "valueSuffix": "%",
+         "showValues": true,
+         "showLegend": false,
+         "showGrid": false,
+         "max": 100,
+         "highlight": 0,
+         "caption": "Of users of each language who want to continue"
+        }
+       ]
+      },
+      {
+       "type": "box",
+       "variant": "card",
+       "padding": "md",
+       "children": [
+        {
+         "type": "chart",
+         "kind": "bar",
+         "title": "Desired",
+         "labels": [
+          "Rust",
+          "Go"
+         ],
+         "series": [
+          {
+           "name": "Desired",
+           "values": [
+            29.2,
+            23.4
+           ]
+          }
+         ],
+         "valueSuffix": "%",
+         "showValues": true,
+         "showLegend": false,
+         "showGrid": false,
+         "max": 100,
+         "highlight": 0,
+         "caption": "Of survey respondents who want to use it"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "sources": [
+    {
+     "title": "Technology | 2025 Stack Overflow Developer Survey",
+     "url": "https://survey.stackoverflow.co/2025/technology"
+    }
+   ],
+   "notes": "The left chart has language users as its denominator; the right chart uses survey respondents. They cannot be interpreted as the same measure, and neither is production backend market share. In the 2025 survey Rust scores 72.4% versus Go 56.5% on admired, and 29.2% versus 23.4% on desired."
+  },
+  {
+   "id": "decision",
+   "name": "Make the service-level choice",
+   "align": "center",
+   "padding": "xl",
+   "tone": "inverse",
+   "background": {
+    "image": {
+     "src": "https://v3b.fal.media/files/b/0aac6a43/n3OwEMkhLZszOzCxN81YJ_O6kMjNVP.jpg",
+     "alt": "Abstract connected service modules on a dark navy background",
+     "fit": "cover",
+     "overlay": "dark"
+    }
+   },
+   "blocks": [
+    {
+     "type": "text",
+     "text": "05 / THE DECISION",
+     "variant": "eyebrow",
+     "tone": "accent"
+    },
+    {
+     "type": "heading",
+     "text": "Choose by the service constraint, ==then test the real workload==",
+     "level": 1,
+     "maxWidth": "lg"
+    },
+    {
+     "type": "grid",
+     "columns": "1fr 1fr",
+     "gap": "xl",
+     "children": [
+      {
+       "type": "box",
+       "variant": "glass",
+       "padding": "lg",
+       "children": [
+        {
+         "type": "icon",
+         "name": "shield-check",
+         "tone": "accent",
+         "variant": "circle"
+        },
+        {
+         "type": "heading",
+         "text": "Lean Rust when…",
+         "level": 3
+        },
+        {
+         "type": "text",
+         "text": "No GC and compile-time ownership are core requirements."
+        }
+       ]
+      },
+      {
+       "type": "box",
+       "variant": "glass",
+       "padding": "lg",
+       "children": [
+        {
+         "type": "icon",
+         "name": "recycle",
+         "tone": "accent2",
+         "variant": "circle"
+        },
+        {
+         "type": "heading",
+         "text": "Lean Go when…",
+         "level": 3
+        },
+        {
+         "type": "text",
+         "text": "Managed memory and Go 1 compatibility fit the team."
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "text",
+     "text": "Next step: prototype one representative endpoint; measure latency, memory and iteration time.",
+     "variant": "caption",
+     "align": "center"
+    }
+   ],
+   "sources": [
+    {
+     "title": "Understanding Ownership - The Rust Programming Language",
+     "url": "https://doc.rust-lang.org/book/ch04-00-understanding-ownership.html"
+    },
+    {
+     "title": "Fearless Concurrency - The Rust Programming Language",
+     "url": "https://doc.rust-lang.org/book/ch16-00-concurrency.html"
+    },
+    {
+     "title": "Go 1.26 Release Notes",
+     "url": "https://go.dev/doc/go1.26"
+    },
+    {
+     "title": "Go 1.27 Release Notes",
+     "url": "https://go.dev/doc/go1.27"
+    }
+   ],
+   "notes": "Close with a decision procedure rather than a winner. If avoiding GC and enforcing ownership during compilation are explicit service requirements, evaluate Rust. If managed memory and Go's compatibility commitment fit team needs, evaluate Go. In either case, prototype a representative endpoint and measure the metrics that matter to this service."
+  }
+ ]
+}

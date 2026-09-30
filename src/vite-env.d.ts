@@ -13,6 +13,14 @@ interface ImportMetaEnv {
   readonly VITE_AGENT_IDLE_TIMEOUT_MS?: string
   /** Optional positive maximum streamed response size in bytes. */
   readonly VITE_AGENT_MAX_STREAM_BYTES?: string
+  /** Magic Slider v2: public agt-* id of the v2 presentation agent. */
+  readonly VITE_AGENT_MODEL_V2?: string
+  /** Magic Slider v2: optional endpoint override (defaults to VITE_API_URL). */
+  readonly VITE_API_URL_V2?: string
+  /** Magic Slider v2: optional limits (defaults 480000 ms, 150000 ms, 12000000 bytes). */
+  readonly VITE_AGENT_V2_REQUEST_TIMEOUT_MS?: string
+  readonly VITE_AGENT_V2_IDLE_TIMEOUT_MS?: string
+  readonly VITE_AGENT_V2_MAX_STREAM_BYTES?: string
 }
 
 interface ImportMeta {

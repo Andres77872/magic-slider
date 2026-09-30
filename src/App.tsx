@@ -233,7 +233,10 @@ const App: React.FC = () => {
         <main className="app-home">
           <header className="home-header app-container">
             <a className="brand" href="#main-content"><span className="brand-mark" aria-hidden="true">M</span>Magic Slider</a>
-            <span className="local-badge"><span aria-hidden="true" />Saved in your browser</span>
+            <div className="home-header__links">
+              <a className="home-v2-link" href="../">Back to Studio v2 <span aria-hidden="true">→</span></a>
+              <span className="local-badge"><span aria-hidden="true" />Saved in your browser</span>
+            </div>
           </header>
           <section className="hero" id="main-content">
             <div className="app-container hero-content">

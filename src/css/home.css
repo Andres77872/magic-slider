@@ -11,6 +11,26 @@
   border-bottom: 1px solid var(--border-color);
 }
 
+.home-header__links {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.home-v2-link {
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--accent-color-alpha-32);
+  color: var(--accent-color-strong);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.home-v2-link:hover {
+  background: var(--accent-color-alpha-12);
+}
+
 .local-badge {
   display: inline-flex;
   align-items: center;

@@ -26,7 +26,9 @@ pnpm dev
 
 Open the URL printed by Vite, normally `http://localhost:5173`. Restart the development server after changing environment variables.
 
-## Create, refine, and present
+## Create, refine, and present (classic v1)
+
+These steps cover the classic v1 studio at `/v1/`. The default studio at `/` is v2; see [Magic Slider v2](#magic-slider-v2-the-primitive-studio).
 
 1. Describe the topic, audience, and goal, then choose **Generate Slides**. For example: “A 7-slide briefing on the state of solar and wind power in 2026 for a city council, with key figures and sources.” Open **Presentation options** to set the length, audience, tone, and theme, or to turn web research and original images off for a request. Or start from the **example catalog** under the request box: 18 examples in six categories (business, education, research and data, technical, marketing, personal and events) each fill in a request and its options, which you can edit before generating.
 2. Review the deck in the presentation workspace. The slide navigator under the preview shows every slide with its layout; select one to jump to it with all of its points visible. Choose **Notes** to read the speaker notes, cited sources, and image descriptions for the current slide.
@@ -36,6 +38,41 @@ Open the URL printed by Vite, normally `http://localhost:5173`. Restart the deve
 6. Use **New Presentation** to start another deck, or **Recent Sessions** to restore a previous deck and its conversation.
 
 History is stored only in this browser. It retains up to ten sessions, with up to 200 messages and 200 action records per session. Storage limits can remove older sessions while preserving the selected one. **Clear History** asks for confirmation, then removes all saved local sessions. If saving fails, current work remains available in memory and **Retry** attempts to save it again; export the deck before closing the page if browser storage remains unavailable.
+
+## Magic Slider v2: the primitive studio
+
+v2 is the default studio at **`/`** (for example `http://localhost:5173/`). The classic v1 studio moved to **`/v1/`** and links back to v2 from its home page. Old `/v2/` links redirect to `/`.
+
+In v2 the agent does not pick one of ten fixed layouts. It composes each slide from **22 renderer-agnostic primitives**:
+
+- **Layout:** stack, grid, box.
+- **Text:** heading, text, list, quote, callout, badge, divider, spacer.
+- **Media:** image, icon, video, profile.
+- **Data:** stat, chart (8 kinds), table, progress, code.
+- **Narrative:** timeline, diagram (flow, cycle, hub, pyramid, funnel, matrix, venn).
+
+Every slide and block has a stable id, so follow-up requests edit exactly what you ask.
+
+- **Create:** describe a deck, set length, audience, tone, one of 12 themes, research and images, then watch slides appear while the agent streams them. You can also start from a template or import JSON; v1 exports are converted into primitives.
+- **Refine:** chat about the deck. The slide you are viewing is sent as the focus, so "make this slide more visual" works. Click any element in the preview, or pick it in the **Inspector** outline, to edit its JSON directly. Drag slides in the rail to reorder them. Switch themes from the toolbar. **Overview** shows every slide at once. Undo and Redo cover agent edits and manual edits (Ctrl/Cmd+Z, Shift for redo).
+- **Present and export:** **Present** goes fullscreen. **Export HTML** writes a self-contained Reveal file with the same styles, fonts and auto-fit. **JSON** downloads the deck document.
+- **Primitive gallery:** shows every primitive, in any theme, next to its JSON.
+
+Generated output is repaired, not rejected. Near-miss values are coerced or dropped: numbers as strings, overlong text, wrong enum case, unknown props, aliases such as `paragraph` or `kpi`, and v1-style slides. Each change is reported in the **Issues** tab. An invalid block is skipped without losing its slide, and a failing edit operation is skipped without losing the others. Slides whose content overflows the 16:9 canvas are scaled to fit. The rail marks them, and the next request tells the agent which slides were too dense.
+
+Configure v2 with `VITE_AGENT_MODEL_V2` (see [.env.example](.env.example)). `pnpm dev:replay` also serves a credential-free v2 replay at `http://127.0.0.1:5175/`: it streams the primitives tour, and follow-ups edit the focused slide.
+
+**The v2 agent** is [`agent/magic-slider-v2.graph.json`](agent/magic-slider-v2.graph.json), generated from the catalog by `pnpm agent:v2`. A test fails if the committed graph drifts from the code.
+
+- Two private server-tool stages run in parallel: web research (Tavily search and extract, which returns facts, chart-ready datasets, quotes and events with sources) and visual design (fal.ai images, theme and font suggestions).
+- They feed a streaming author stage whose only tools are the client-side `create_presentation` and `edit_presentation`.
+- Publish it as a public agent with:
+
+```bash
+/home/andres/PycharmProjects/api.magic_llm/.venv/bin/python scripts/publish-agent-v2.py --base-url http://192.168.1.90:7000 --username root
+```
+
+The script prompts for the password and logs in. It then creates the agent as public through `api.magic_llm/scripts/manage_agent.py` (use `--update <agt-id>` to update in place), checks that the agent is publicly listed, and writes `VITE_AGENT_MODEL_V2` to `.env`. Architecture, contract and design notes are in [docs/v2-primitives.md](docs/v2-primitives.md).
 
 ## API configuration
 
