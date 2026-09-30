@@ -6,6 +6,7 @@ import { normalizeDeck, type DeckDiagnostic } from '../domain/normalize'
 import { applyOperations, parseOperations } from '../domain/operations'
 import { CREATE_TOOL, EDIT_TOOL, TOOL_ALIASES } from './contract'
 import { clientContextLine, formatDeckContext } from './deckContext'
+import { extractMentionIds, formatReferencesContext, resolveReference } from './references'
 import { parsePartialJson, completedItems } from './partialJson'
 
 export interface AgentConfig {
@@ -27,12 +28,25 @@ export interface GenerateInput {
   deck: Deck | null
   history?: ChatTurn[]
   focusedSlideId?: string | null
+  /** The block selected in the editor; "this element" means it. */
+  selectedBlockId?: string | null
+  /**
+   * Ids the user referenced. Mentions in the prompt ("@hero-image") are always
+   * included; this adds references attached another way.
+   */
+  references?: readonly string[]
   fitScales?: Readonly<Record<string, number>>
   signal?: AbortSignal
   onPhase?: (phase: GenerationPhase, detail?: string) => void
   /** Progressive preview while create_presentation arguments stream in. */
   onPreview?: (deck: Deck, slidesReady: number) => void
   onText?: (text: string) => void
+  /**
+   * The deck to apply edits to when the response completes. The user may keep
+   * editing while the agent works; its operations then apply to the latest
+   * deck by id (last writer wins), instead of discarding those edits.
+   */
+  resolveDeck?: () => Deck | null
   now?: () => Date
 }
 
@@ -45,6 +59,8 @@ export type GenerateResult =
     ok: true
     kind: 'deck'
     deck: Deck
+    /** The deck the changes were applied to (the latest one when the user edited meanwhile). */
+    base?: Deck | null
     created: boolean
     appliedOperations: number
     failedOperations: FailedOperation[]
@@ -76,11 +92,23 @@ function generationError(category: GenerationError['category'], code: string, me
   return createAppError({ category, diagnostics: [{ code, message, details }], cause }) as GenerationError
 }
 
+/** Referenced ids: explicit ones first, then mentions in the prompt, without duplicates. */
+export function requestReferences(input: Pick<GenerateInput, 'prompt' | 'references'>): string[] {
+  return [...new Set([...(input.references ?? []), ...extractMentionIds(input.prompt)])]
+}
+
 export function buildMessages(input: GenerateInput): Array<{ role: 'system' | 'user' | 'assistant'; content: string }> {
+  const references = input.deck ? requestReferences(input) : []
+  const pinnedSlideIds = input.deck
+    ? [...new Set(references.map((id) => resolveReference(input.deck!, id)?.slideId).filter((id): id is string => Boolean(id)))]
+    : []
   const system = [
-    input.deck ? formatDeckContext(input.deck, { focusedSlideId: input.focusedSlideId, fitScales: input.fitScales }) : 'Current presentation: none yet. Create one with create_presentation.',
+    input.deck
+      ? formatDeckContext(input.deck, { focusedSlideId: input.focusedSlideId, selectedBlockId: input.selectedBlockId, pinnedSlideIds, fitScales: input.fitScales })
+      : 'Current presentation: none yet. Create one with create_presentation.',
+    input.deck ? formatReferencesContext(input.deck, references) : null,
     clientContextLine(input.now?.() ?? new Date()),
-  ].join('\n\n')
+  ].filter(Boolean).join('\n\n')
   const history = (input.history ?? [])
     .filter((turn) => (turn.role === 'user' || turn.role === 'assistant') && turn.content.trim())
     .slice(-HISTORY_LIMIT)
@@ -337,7 +365,8 @@ export async function generate(input: GenerateInput, deps: { fetch?: typeof fetc
       return { ok: false, error: generationError('validation', 'empty-response', 'The agent returned neither a presentation nor a message.'), rawText }
     }
 
-    const applied = applyToolCalls(input.deck, calls)
+    const target = input.deck ? input.resolveDeck?.() ?? input.deck : input.deck
+    const applied = applyToolCalls(target, calls)
     if (!applied.deck || (!applied.created && applied.appliedOperations === 0)) {
       const reasons = applied.failedOperations.map((failure) => failure.message)
       const error = generationError('validation', 'no-applicable-changes', reasons[0] ?? 'The agent response contained no applicable changes.', reasons)
@@ -347,6 +376,7 @@ export async function generate(input: GenerateInput, deps: { fetch?: typeof fetc
       ok: true,
       kind: 'deck',
       deck: applied.deck,
+      base: target,
       created: applied.created,
       appliedOperations: applied.appliedOperations,
       failedOperations: applied.failedOperations,

@@ -187,15 +187,15 @@ describe('slide rail drag and drop', () => {
 
   it('moves a slide forward after the drop target, including to the last position', () => {
     const deck = deckOf({ slides: ['a', 'b', 'c', 'd'].map((id) => ({ id, blocks: [{ type: 'text', text: id }] })) })
-    const onMove = vi.fn()
-    render(<SlideRail deck={deck} theme={resolveTheme(undefined)} fitScales={{}} activeIndex={0} onSelect={() => undefined} onMove={onMove} />)
+    const onMoveTo = vi.fn()
+    render(<SlideRail deck={deck} theme={resolveTheme(undefined)} fitScales={{}} activeIndex={0} onSelect={() => undefined} onMoveTo={onMoveTo} onAction={() => undefined} onAddSlide={() => undefined} />)
     const data = new Map<string, string>()
-    const dataTransfer = { setData: (key: string, value: string) => data.set(key, value), getData: (key: string) => data.get(key) ?? '', effectAllowed: '' }
-    fireEvent.dragStart(screen.getByRole('button', { name: 'Slide 3' }), { dataTransfer })
-    fireEvent.drop(screen.getByRole('button', { name: 'Slide 4' }), { dataTransfer })
-    expect(onMove).toHaveBeenCalledWith('c', 'd')
-    fireEvent.dragStart(screen.getByRole('button', { name: 'Slide 4' }), { dataTransfer })
-    fireEvent.drop(screen.getByRole('button', { name: 'Slide 2' }), { dataTransfer })
-    expect(onMove).toHaveBeenLastCalledWith('d', 'a')
+    const dataTransfer = { setData: (key: string, value: string) => data.set(key, value), getData: (key: string) => data.get(key) ?? '', effectAllowed: '', dropEffect: '', types: [] as string[] }
+    fireEvent.dragStart(screen.getByRole('option', { name: /^Slide 3 of 4/ }), { dataTransfer })
+    fireEvent.drop(screen.getByRole('option', { name: /^Slide 4 of 4/ }), { dataTransfer })
+    expect(onMoveTo).toHaveBeenCalledWith('c', 3)
+    fireEvent.dragStart(screen.getByRole('option', { name: /^Slide 4 of 4/ }), { dataTransfer })
+    fireEvent.drop(screen.getByRole('option', { name: /^Slide 2 of 4/ }), { dataTransfer })
+    expect(onMoveTo).toHaveBeenLastCalledWith('d', 1)
   })
 })

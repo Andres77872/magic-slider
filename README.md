@@ -53,14 +53,38 @@ In v2 the agent does not pick one of ten fixed layouts. It composes each slide f
 
 Every slide and block has a stable id, so follow-up requests edit exactly what you ask.
 
-- **Create:** describe a deck, set length, audience, tone, one of 12 themes, research and images, then watch slides appear while the agent streams them. You can also start from a template or import JSON; v1 exports are converted into primitives.
-- **Refine:** chat about the deck. The slide you are viewing is sent as the focus, so "make this slide more visual" works. Click any element in the preview, or pick it in the **Inspector** outline, to edit its JSON directly. Drag slides in the rail to reorder them. Switch themes from the toolbar. **Overview** shows every slide at once. Undo and Redo cover agent edits and manual edits (Ctrl/Cmd+Z, Shift for redo).
-- **Present and export:** **Present** goes fullscreen. **Export HTML** writes a self-contained Reveal file with the same styles, fonts and auto-fit. **JSON** downloads the deck document.
+- **Create:** describe a deck, set length, audience, tone, one of 12 themes, research and images, then watch slides appear while the agent streams them. You can also start from a blank presentation or a template, or import JSON; v1 exports are converted into primitives.
+- **Edit it yourself:** the **Edit** view shows the current slide with every element selectable:
+  - Hover outlines each element. Click selects the innermost one; **Esc** (or Shift+Enter) selects its parent. The breadcrumb in the **Design** tab shows the whole path.
+  - A contextual toolbar above the selection edits text, selects the parent, moves the element up or down, duplicates it, asks the AI about it, or deletes it.
+  - Double-click (or **Enter**) edits text in place. That works for headings, paragraphs, list items, stat parts, quotes, callouts, table cells, timeline and diagram labels, and captions. The rich-text markers stay visible while you type; Ctrl/Cmd+B, I, E and K wrap the selection.
+  - **Insert** (or `/`) opens a searchable picker with all 22 primitives. The new block goes inside the selected container, after the selected block, or at the end of the slide.
+  - **New slide** in the filmstrip offers 12 layouts: blank, title, section break, bullets, text and image, cards, key numbers, chart, timeline, table, quote and closing.
+- **Every setting has a control:** the **Design** tab is generated from each primitive's schema and grouped into Content, Layout, Style and Animation. A new primitive or prop gets an editor automatically.
+  - Controls include text with a formatting bar, segmented choices, theme-aware color pickers, an icon picker, image URLs with a preview, and reorderable item lists.
+  - Charts and tables get spreadsheet-style data grids.
+  - Fields commit on Enter or blur and Esc reverts, so each change is one undo step. Invalid values show an inline error instead of breaking the deck.
+  - With no block selected, the tab edits the slide's name, alignment, spacing, tone, background (color, gradient or image) and transition.
+  - The other tabs: **Notes** for speaker notes and sources; **Theme** for the title, language, theme swatches, fonts, radius, decoration, color overrides and viewer settings; **Layers** for a keyboard-navigable block tree; **JSON** for the raw deck; **Issues** for validation notes.
+- **Manage slides:** the filmstrip is a keyboard-accessible list.
+  - Drag slides to reorder them, or use Alt+←/→.
+  - Right-click, the ⋯ button or Shift+F10 opens a menu to reference, duplicate, copy, paste, move or delete a slide.
+  - Ctrl/Cmd+C, X and V copy and paste blocks and slides, also across tabs. **Grid** shows every slide at once.
+- **Undo:** agent edits and manual edits share one operation path and one undo history (Ctrl/Cmd+Z, Shift for redo). Deletions show a toast with **Undo**.
+- **Point the agent at exactly what you mean:** type `@` in the chat to reference slides and elements, e.g. "update this image @hero-image and tighten @market-size".
+  - Suggestions start with the slide you are viewing and its elements. Arrow keys and Enter pick one.
+  - There are three other ways to add a reference: **Ask AI** on the selection toolbar or in the Design tab, the `@` key (or Ctrl/Cmd+J) with something selected, or dragging a slide thumbnail or a layer onto the composer.
+  - References show as highlighted tokens and removable chips. The current selection is offered as a suggested chip; it is sent as context unless you dismiss it.
+  - The agent receives every referenced slide or block in full, plus its id.
+  - In the conversation, references and the slides each reply changed are links that jump to them. The latest agent change has a **Revert** button.
+  - You can keep editing while the agent works; its operations apply by id on top of your changes.
+- **Present and export:** **Preview** runs the live Reveal viewer. **Present** (or `P`) goes fullscreen from the current slide. **Export** writes a self-contained Reveal HTML file with the same styles, fonts and auto-fit, or downloads the deck JSON.
+- **Keyboard shortcuts:** press `?` to list them.
 - **Primitive gallery:** shows every primitive, in any theme, next to its JSON.
 
 Generated output is repaired, not rejected. Near-miss values are coerced or dropped: numbers as strings, overlong text, wrong enum case, unknown props, aliases such as `paragraph` or `kpi`, and v1-style slides. Each change is reported in the **Issues** tab. An invalid block is skipped without losing its slide, and a failing edit operation is skipped without losing the others. Slides whose content overflows the 16:9 canvas are scaled to fit. The rail marks them, and the next request tells the agent which slides were too dense.
 
-Configure v2 with `VITE_AGENT_MODEL_V2` (see [.env.example](.env.example)). `pnpm dev:replay` also serves a credential-free v2 replay at `http://127.0.0.1:5175/`: it streams the primitives tour, and follow-ups edit the focused slide.
+Configure v2 with `VITE_AGENT_MODEL_V2` (see [.env.example](.env.example)). `pnpm dev:replay` also serves a credential-free v2 replay at `http://127.0.0.1:5175/`. It streams the primitives tour. Follow-ups edit the items you @reference: text blocks get a ✦ and slides turn accent. Without a reference, a follow-up accents the focused slide.
 
 **The v2 agent** is [`agent/magic-slider-v2.graph.json`](agent/magic-slider-v2.graph.json), generated from the catalog by `pnpm agent:v2`. A test fails if the committed graph drifts from the code.
 

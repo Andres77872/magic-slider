@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { z } from 'zod'
 
+import type { ReferenceSnapshot } from '../agent/references'
 import { deckTitle, type Deck } from '../domain/deckSchema'
 import { normalizeDeck } from '../domain/normalize'
 
@@ -17,12 +18,22 @@ export const MESSAGE_LIMIT = 160
 
 export type ChatRole = 'user' | 'assistant' | 'status' | 'error'
 
+/** Slides a turn touched, for "changed" links under a message. */
+export interface MessageChanges {
+  added: string[]
+  changed: string[]
+  removed: number
+}
+
 export interface ChatMessage {
   id: string
   role: ChatRole
   text: string
   createdAt: string
   details?: string[]
+  /** Items the user referenced with @mentions, as they were when sent. */
+  references?: ReferenceSnapshot[]
+  changes?: MessageChanges
 }
 
 export interface Session {
@@ -46,6 +57,18 @@ const messageSchema = z.object({
   text: z.string().max(20_000),
   createdAt: z.string(),
   details: z.array(z.string().max(1_000)).max(40).optional(),
+  references: z.array(z.object({
+    id: z.string().min(1).max(64),
+    kind: z.enum(['slide', 'block']),
+    slideId: z.string().max(64),
+    type: z.string().max(40),
+    label: z.string().max(200),
+  })).max(40).optional(),
+  changes: z.object({
+    added: z.array(z.string().max(64)).max(60),
+    changed: z.array(z.string().max(64)).max(60),
+    removed: z.number().int().min(0),
+  }).optional(),
 })
 
 const storedSchema = z.object({
@@ -71,8 +94,16 @@ export function createSession(): Session {
   return { id: newId('session'), title: 'Untitled presentation', createdAt: now, updatedAt: now, deck: null, messages: [] }
 }
 
-export function createMessage(role: ChatRole, text: string, details?: string[]): ChatMessage {
-  return { id: newId('msg'), role, text, createdAt: new Date().toISOString(), ...(details?.length ? { details } : {}) }
+export function createMessage(role: ChatRole, text: string, details?: string[], extra: Pick<ChatMessage, 'references' | 'changes'> = {}): ChatMessage {
+  return {
+    id: newId('msg'),
+    role,
+    text,
+    createdAt: new Date().toISOString(),
+    ...(details?.length ? { details } : {}),
+    ...(extra.references?.length ? { references: extra.references } : {}),
+    ...(extra.changes ? { changes: extra.changes } : {}),
+  }
 }
 
 export function parseStore(raw: string | null): Store | null {
@@ -176,6 +207,7 @@ export function useSessions() {
     return { version: 1, selectedId: session.id, sessions: [session] }
   })
   const [persistenceError, setPersistenceError] = useState<string | null>(null)
+  const [saveState, setSaveState] = useState<'saved' | 'saving' | 'error'>('saved')
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const latest = useRef(store)
   latest.current = store
@@ -184,6 +216,7 @@ export function useSessions() {
   const deleted = useRef(new Set<string>())
   const change = useCallback((update: (previous: Store) => Store) => {
     dirty.current = true
+    setSaveState('saving')
     setStore(update)
   }, [])
 
@@ -193,6 +226,7 @@ export function useSessions() {
     const merged = mergeStores(latest.current, parseStore(target.getItem(STORAGE_KEY)), deleted.current)
     const result = writeStore(target, merged)
     if (result.ok) dirty.current = false
+    setSaveState(result.ok ? 'saved' : 'error')
     setPersistenceError(!result.ok
       ? `Changes could not be saved in this browser (${result.error}). Export your deck to keep it.`
       : result.dropped
@@ -276,5 +310,5 @@ export function useSessions() {
     .sort(byRecency)
     .map((session) => ({ id: session.id, title: session.title, updatedAt: session.updatedAt, slideCount: session.deck?.slides.length ?? 0, theme: session.deck?.theme?.preset })), [store.sessions])
 
-  return { current, summaries, persistenceError, setDeck, appendMessages, renameFromPrompt, createAndSelect, select, remove, flush }
+  return { current, summaries, persistenceError, saveState, setDeck, appendMessages, renameFromPrompt, createAndSelect, select, remove, flush }
 }

@@ -15,6 +15,10 @@ const FOCUSED_BLOCK_PROPS_MAX = 1_600
 
 export interface DeckContextOptions {
   focusedSlideId?: string | null
+  /** Slides the user referenced; they keep full detail like the focused slide. */
+  pinnedSlideIds?: readonly string[]
+  /** The block selected in the editor, if any. */
+  selectedBlockId?: string | null
   /** Content scale applied to fit each slide (1 = fits). */
   fitScales?: Readonly<Record<string, number>>
   maxChars?: number
@@ -64,8 +68,12 @@ function slideHeader(slide: Slide, index: number, options: DeckContextOptions): 
   return parts.join(' · ')
 }
 
+function isPinned(slide: Slide, options: DeckContextOptions): boolean {
+  return slide.id === options.focusedSlideId || Boolean(options.pinnedSlideIds?.includes(slide.id))
+}
+
 function slideSection(slide: Slide, index: number, mode: 'props' | 'outline', options: DeckContextOptions): string {
-  const focused = slide.id === options.focusedSlideId
+  const focused = isPinned(slide, options)
   const lines = [slideHeader(slide, index, options)]
   blockLines(slide.blocks, 0, focused ? 'props' : mode, focused ? FOCUSED_BLOCK_PROPS_MAX : BLOCK_PROPS_MAX, lines)
   if (slide.notes) lines.push(`notes: ${truncate(slide.notes.replace(/\s+/g, ' '), focused ? 1_200 : mode === 'props' ? 280 : 90)}`)
@@ -98,6 +106,7 @@ export function formatDeckContext(deck: Deck, options: DeckContextOptions = {}):
     `meta: ${JSON.stringify({ title: deck.title, language: deck.language, theme: deck.theme, settings: deck.settings })}`,
     `slideCount: ${deck.slides.length}`,
     focusIndex >= 0 ? `Focused slide: ${deck.slides[focusIndex].id} (slide ${focusIndex + 1}) — the user is looking at it; "this slide" means it.` : null,
+    options.selectedBlockId && focusIndex >= 0 ? `Selected block: ${options.selectedBlockId} on slide ${deck.slides[focusIndex].id} — the user has it selected in the editor; "this element", "this block" or "it" means it.` : null,
     overflow.length ? `Layout feedback: ${overflow.join(', ')} had to be scaled down to fit the 16:9 canvas. When editing those slides, tighten text or split content.` : null,
   ].filter(Boolean).join('\n')
 
@@ -106,10 +115,10 @@ export function formatDeckContext(deck: Deck, options: DeckContextOptions = {}):
   let text = render()
   if (text.length <= maxChars) return text
 
-  // Degrade the slides farthest from the focus first; the focused slide keeps full detail.
+  // Degrade the slides farthest from the focus first; focused and referenced slides keep full detail.
   const anchor = focusIndex >= 0 ? focusIndex : 0
   const order = deck.slides.map((_, index) => index)
-    .filter((index) => index !== focusIndex)
+    .filter((index) => !isPinned(deck.slides[index], options))
     .sort((left, right) => Math.abs(right - anchor) - Math.abs(left - anchor))
   for (const level of ['outline', 'header'] as const) {
     const note = `\n\n(Some slides are listed as ${level === 'outline' ? 'outlines' : 'headers only'} to fit; outlined slides still list every block id. Ask the user or use replace_slide only when a slide's details are needed.)`

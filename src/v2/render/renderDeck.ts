@@ -270,6 +270,18 @@ export function applyThemeVariables(node: HTMLElement, theme: ResolvedTheme): vo
   for (const [key, value] of Object.entries(themeVariables(theme))) node.style.setProperty(key, value)
 }
 
+/**
+ * Static hosts (thumbnails, the edit canvas) have no Reveal lazy loader:
+ * resolve image data-src themselves and keep videos to their poster.
+ */
+export function hydrateStaticMedia(root: ParentNode): void {
+  for (const image of root.querySelectorAll('img[data-src]')) {
+    image.setAttribute('loading', 'lazy')
+    image.setAttribute('src', image.getAttribute('data-src')!)
+  }
+  for (const video of root.querySelectorAll('video')) video.removeAttribute('data-src')
+}
+
 /** Whether any slide needs Reveal's highlight plugin. */
 export function deckUsesCode(deck: Deck): boolean {
   const visit = (blocks: readonly Block[]): boolean => blocks.some((block) => block.type === 'code' || (block.children ? visit(block.children) : false))

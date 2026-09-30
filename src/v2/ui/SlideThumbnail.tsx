@@ -1,7 +1,7 @@
 import { memo, useEffect, useRef } from 'react'
 
 import type { Deck, Slide } from '../domain/deckSchema'
-import { CANVAS, applyThemeVariables, renderSlide } from '../render/renderDeck'
+import { CANVAS, applyThemeVariables, hydrateStaticMedia, renderSlide } from '../render/renderDeck'
 import type { ResolvedTheme } from '../render/theme'
 
 interface SlideThumbnailProps {
@@ -37,11 +37,7 @@ function SlideThumbnailInner({ deck, slide, theme, fitScale, width }: SlideThumb
       content.classList.add('ms-fit')
       content.style.setProperty('--ms-fit', String(fitScale))
     }
-    for (const image of element.querySelectorAll('img[data-src]')) {
-      image.setAttribute('loading', 'lazy')
-      image.setAttribute('src', image.getAttribute('data-src')!)
-    }
-    for (const video of element.querySelectorAll('video')) video.removeAttribute('data-src')
+    hydrateStaticMedia(element)
     root.appendChild(element)
     host.replaceChildren(root)
     // slideKey stands in for the slide object, whose identity changes on every normalization.

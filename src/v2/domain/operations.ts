@@ -29,6 +29,7 @@ export const operationSchema = z.discriminatedUnion('op', [
   z.object({ op: z.literal('duplicate_slide'), slideId: id, after: anchor.optional() }),
   z.object({ op: z.literal('update_block'), blockId: id, slideId: id.optional(), set: looseRecord }),
   z.object({ op: z.literal('replace_block'), blockId: id, slideId: id.optional(), block: z.unknown() }),
+  z.object({ op: z.literal('duplicate_block'), blockId: id, slideId: id.optional() }),
   z.object({ op: z.literal('insert_blocks'), slideId: id, parentId: id.nullable().optional(), index: z.number().int().min(0).optional(), blocks: z.array(z.unknown()).min(1).max(24) }),
   z.object({ op: z.literal('remove_blocks'), blockIds: z.array(id).min(1).max(120), slideId: id.optional() }),
   z.object({ op: z.literal('move_block'), blockId: id, slideId: id.optional(), toSlideId: id.optional(), parentId: id.nullable().optional(), index: z.number().int().min(0).optional() }),
@@ -228,6 +229,23 @@ function applyOne(deck: Deck, operation: DeckOperation, diagnostics: DeckDiagnos
       collect(blockDiagnostics)
       if (!blocks.length) fail(`Block "${operation.blockId}" could not be ${operation.op === 'update_block' ? 'updated' : 'replaced'} with invalid content.`)
       location.siblings[location.index] = blocks[0]
+      return next
+    }
+    case 'duplicate_block': {
+      const location = locateBlock(next, operation.blockId, operation.slideId)
+      const slide = next.slides[location.slideIndex]
+      const copy = structuredClone(location.siblings[location.index]) as Record<string, unknown>
+      const strip = (node: Record<string, unknown>) => {
+        delete node.id
+        delete node.morphId
+        if (Array.isArray(node.children)) node.children.forEach((child) => strip(child as Record<string, unknown>))
+      }
+      strip(copy)
+      const { blocks, diagnostics: blockDiagnostics } = normalizeBlocksForSlide([copy], slide.id, next, `duplicate_block.${operation.blockId}`, location.depth)
+      collect(blockDiagnostics)
+      if (!blocks.length) fail(`Block "${operation.blockId}" could not be duplicated.`)
+      assertCapacity(slide, location.siblings, location.parent ? location.depth - 1 : null, blocks)
+      location.siblings.splice(location.index + 1, 0, ...blocks)
       return next
     }
     case 'insert_blocks': {

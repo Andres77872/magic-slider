@@ -40,11 +40,13 @@ interface HomeViewProps {
   onOpenSession: (id: string) => void
   onDeleteSession: (id: string) => void
   onOpenGallery: () => void
+  /** Starts an empty deck to build by hand. */
+  onBlank?: () => void
 }
 
 const featured = presentationExamples.filter((example) => example.featured).concat(presentationExamples.filter((example) => !example.featured)).slice(0, 8)
 
-export default function HomeView({ sessions, disabled, busy, error, onGenerate, onTemplate, onImport, onOpenSession, onDeleteSession, onOpenGallery }: HomeViewProps) {
+export default function HomeView({ sessions, disabled, busy, error, onGenerate, onTemplate, onImport, onOpenSession, onDeleteSession, onOpenGallery, onBlank }: HomeViewProps) {
   const [prompt, setPrompt] = useState('')
   const [options, setOptions] = useState<BriefOptions>(defaultBriefOptions)
   const [showOptions, setShowOptions] = useState(false)
@@ -172,6 +174,12 @@ export default function HomeView({ sessions, disabled, busy, error, onGenerate, 
       <section className="v2-home__section" aria-labelledby="v2-start-title">
         <h2 id="v2-start-title">Start without generating</h2>
         <div className="v2-cards">
+          {onBlank && (
+            <button type="button" className="v2-card v2-card--template" disabled={disabled || busy} onClick={onBlank}>
+              <strong>Blank presentation</strong>
+              <span>Build it yourself from layouts and blocks; ask the assistant any time</span>
+            </button>
+          )}
           {deckTemplates.map((template) => (
             <button key={template.id} type="button" className="v2-card v2-card--template" disabled={disabled || busy} onClick={() => onTemplate(template)}>
               <strong>{template.title}</strong>
